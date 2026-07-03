@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>พอร์ตหุ้นต่างประเทศ — Dashboard Mockup</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-950:#061A33;
+    --navy-900:#0B2545;
+    --navy-800:#13315C;
+    --blue-600:#2E6BFF;
+    --blue-500:#3E92CC;
+    --blue-100:#E7F0FF;
+    --ice:#F5F9FF;
+    --white:#FFFFFF;
+    --green:#1FAE6B;
+    --red:#E5484D;
+    --slate-500:#5B6B85;
+    --slate-300:#AEB9CC;
+    --line:#DCE6F5;
+    --font-display:'Sora', 'IBM Plex Sans Thai', sans-serif;
+    --font-body:'IBM Plex Sans Thai', 'Sora', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--ice);
+    color:var(--navy-900);
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+
+  /* ---------- Banner: mockup notice ---------- */
+  .status-banner{
+    text-align:center;
+    font-size:13px;
+    padding:8px 12px;
+    letter-spacing:.02em;
+    background:var(--navy-950);
+    color:var(--blue-100);
+  }
+  .status-banner.ok{background:#0E3B24;color:#B7F2D0;}
+  .status-banner.error{background:#4A1418;color:#FBC7CA;}
+  .status-banner b{color:#fff;}
+
+  /* ---------- Ticker strip (signature element) ---------- */
+  .ticker-wrap{
+    background:var(--navy-900);
+    overflow:hidden;
+    border-bottom:1px solid var(--navy-800);
+  }
+  .ticker{
+    display:flex;
+    gap:36px;
+    white-space:nowrap;
+    padding:9px 0;
+    animation:scroll 32s linear infinite;
+    font-family:var(--font-mono);
+    font-size:12.5px;
+  }
+  @keyframes scroll{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+  .tick{color:var(--slate-300); display:flex; gap:6px; align-items:center;}
+  .tick b{color:#fff; font-weight:600;}
+  .tick .up{color:#4ADE80;}
+  .tick .down{color:#FB7185;}
+
+  /* ---------- App shell ---------- */
+  .app{
+    display:grid;
+    grid-template-columns:232px 1fr;
+    min-height:100vh;
+  }
+  .sidebar{
+    background:var(--navy-900);
+    color:var(--blue-100);
+    padding:28px 20px;
+    display:flex;
+    flex-direction:column;
+    gap:28px;
+  }
+  .brand{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:17px;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .brand .dot{
+    width:10px;height:10px;border-radius:3px;
+    background:linear-gradient(135deg,var(--blue-600),var(--blue-500));
+    transform:rotate(45deg);
+  }
+  .nav{display:flex;flex-direction:column;gap:4px;}
+  .nav a{
+    text-decoration:none;
+    padding:10px 12px;
+    border-radius:8px;
+    font-size:14px;
+    color:var(--slate-300);
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .nav a.active{background:var(--navy-800);color:#fff;font-weight:600;}
+  .nav a:hover{color:#fff;}
+  .side-foot{
+    margin-top:auto;
+    font-size:12px;
+    color:var(--slate-300);
+    border-top:1px solid var(--navy-800);
+    padding-top:16px;
+    line-height:1.6;
+  }
+  .side-foot b{color:#fff;}
+
+  .main{padding:28px 34px 60px;}
+  .top-row{
+    display:flex;justify-content:space-between;align-items:flex-start;
+    margin-bottom:22px;flex-wrap:wrap;gap:12px;
+  }
+  .page-title{font-family:var(--font-display);font-weight:700;font-size:24px;margin:0;}
+  .page-sub{color:var(--slate-500);font-size:13.5px;margin-top:4px;}
+  .updated-pill{
+    background:var(--white);border:1px solid var(--line);
+    border-radius:999px;padding:7px 14px;font-size:12.5px;color:var(--slate-500);
+    display:flex;align-items:center;gap:8px;
+  }
+  .updated-pill .pulse{
+    width:7px;height:7px;border-radius:50%;background:var(--green);
+    box-shadow:0 0 0 3px rgba(31,174,107,.18);
+  }
+
+  /* ---------- Summary cards ---------- */
+  .cards{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:26px;
+  }
+  .card{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:18px 20px;
+    position:relative;
+    overflow:hidden;
+  }
+  .card.hero{
+    background:linear-gradient(135deg,var(--navy-900) 0%,var(--navy-800) 55%,var(--blue-600) 140%);
+    color:#fff;border:none;
+  }
+  .card .label{font-size:12.5px;color:var(--slate-500);margin-bottom:8px;}
+  .card.hero .label{color:var(--blue-100);}
+  .card .value{font-family:var(--font-mono);font-size:24px;font-weight:600;}
+  .card .delta{font-size:12.5px;margin-top:8px;display:inline-flex;gap:5px;align-items:center;font-family:var(--font-mono);}
+  .delta.up{color:var(--green);} .delta.down{color:var(--red);}
+  .card.hero .delta.up{color:#7CF2B3;}
+  .card.hero .value{font-size:28px;}
+
+  /* ---------- Tabs: short-term / long-term ---------- */
+  .tabs{display:flex;gap:8px;margin-bottom:16px;}
+  .tab-btn{
+    font-family:var(--font-body);
+    font-size:13.5px;font-weight:600;
+    padding:9px 18px;border-radius:10px;
+    border:1px solid var(--line);
+    background:var(--white);color:var(--slate-500);
+    cursor:pointer;
+  }
+  .tab-btn.active{background:var(--navy-900);color:#fff;border-color:var(--navy-900);}
+
+  .panel{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:22px;
+    margin-bottom:24px;
+  }
+  .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;}
+  .panel-head h3{font-family:var(--font-display);font-size:16px;margin:0;}
+  .panel-head .tag{
+    font-size:11.5px;background:var(--blue-100);color:var(--blue-600);
+    padding:4px 10px;border-radius:999px;font-weight:600;
+  }
+  .btn-add{
+    background:var(--blue-600);color:#fff;border:none;border-radius:9px;
+    padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;
+    font-family:var(--font-body);
+  }
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  thead th{
+    text-align:right;color:var(--slate-500);font-weight:600;font-size:12px;
+    padding:8px 10px;border-bottom:1px solid var(--line);
+    text-transform:uppercase;letter-spacing:.02em;
+  }
+  thead th:first-child, thead th:nth-child(2){text-align:left;}
+  tbody td{padding:11px 10px;border-bottom:1px solid var(--line);text-align:right;font-family:var(--font-mono);}
+  tbody td:first-child, tbody td:nth-child(2){text-align:left;font-family:var(--font-body);}
+  tbody tr:hover{background:var(--blue-100);}
+  .sym{font-weight:700;color:var(--navy-900);}
+  .name{color:var(--slate-500);font-size:12px;}
+  .pos{color:var(--green);font-weight:600;} .neg{color:var(--red);font-weight:600;}
+  .pill-sm{font-size:11px;padding:3px 8px;border-radius:6px;font-weight:600;}
+  .pill-sm.pos{background:rgba(31,174,107,.12);} .pill-sm.neg{background:rgba(229,72,77,.12);}
+
+  /* ---------- lower grid: allocation + entry form ---------- */
+  .grid-2{display:grid;grid-template-columns:1.1fr 1.4fr;gap:20px;}
+  .donut-wrap{display:flex;align-items:center;gap:22px;}
+  .legend{display:flex;flex-direction:column;gap:10px;font-size:13px;}
+  .legend .row{display:flex;align-items:center;gap:8px;}
+  .legend .sw{width:10px;height:10px;border-radius:3px;}
+  .legend .val{margin-left:auto;font-family:var(--font-mono);color:var(--slate-500);}
+
+  .entry-form{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
+  .entry-form .full{grid-column:1/-1;}
+  .field label{font-size:11.5px;color:var(--slate-500);display:block;margin-bottom:5px;}
+  .field select, .field input{
+    width:100%;padding:9px 10px;border-radius:8px;border:1px solid var(--line);
+    font-family:var(--font-body);font-size:13px;background:var(--ice);color:var(--navy-900);
+  }
+  .form-actions{display:flex;justify-content:flex-end;gap:10px;}
+  .btn-ghost{
+    background:transparent;border:1px solid var(--line);color:var(--slate-500);
+    padding:9px 16px;border-radius:9px;font-size:13px;cursor:pointer;font-family:var(--font-body);
+  }
+
+  .footnote{font-size:12px;color:var(--slate-500);margin-top:6px;}
+
+  .form-preview{opacity:.72;}
+  .form-preview input, .form-preview select{background:#EEF3FA;cursor:not-allowed;}
+  .tag.soon{background:#FFF1D6;color:#B7791F;}
+
+  .fee-sign{font-weight:700;}
+  .fee-sign.plus{color:var(--green);}
+  .fee-sign.minus{color:var(--red);}
+  .fee-note{
+    font-size:12.5px;
+    background:var(--blue-100);
+    color:var(--navy-800);
+    border-radius:10px;
+    padding:10px 14px;
+    margin-bottom:14px;
+    border:1px solid var(--line);
+  }
+  .fee-note.sell{background:rgba(229,72,77,.08);}
+  .fee-note b{color:var(--navy-900);}
+
+  .right-col{display:flex;flex-direction:column;gap:20px;}
+
+  /* view toggle */
+  .view-toggle{display:flex;background:var(--ice);border:1px solid var(--line);border-radius:9px;padding:3px;}
+  .vt-btn{
+    border:none;background:transparent;font-size:12px;font-weight:600;color:var(--slate-500);
+    padding:6px 12px;border-radius:7px;cursor:pointer;font-family:var(--font-body);
+  }
+  .vt-btn.active{background:var(--navy-900);color:#fff;}
+
+  /* Webull-style stock list */
+  .stock-list{display:flex;flex-direction:column;}
+  .stock-row{
+    display:grid;
+    grid-template-columns:1fr 80px 100px;
+    align-items:center;
+    gap:14px;
+    padding:13px 6px;
+    border-bottom:1px solid var(--line);
+  }
+  .stock-row:last-child{border-bottom:none;}
+  .sr-left{display:flex;flex-direction:column;gap:3px;min-width:0;}
+  .sr-sym{font-family:var(--font-display);font-weight:700;font-size:14.5px;color:var(--navy-900);display:flex;align-items:center;gap:7px;}
+  .sr-badge{
+    font-size:10px;font-weight:700;color:var(--blue-600);background:var(--blue-100);
+    padding:2px 6px;border-radius:5px;
+  }
+  .sr-meta{font-size:12px;color:var(--slate-500);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .sr-spark{display:flex;justify-content:center;}
+  .sr-right{text-align:right;display:flex;flex-direction:column;gap:4px;align-items:flex-end;}
+  .sr-price{font-family:var(--font-mono);font-weight:600;font-size:14px;color:var(--navy-900);}
+  .sr-chg{
+    font-family:var(--font-mono);font-size:12px;font-weight:700;
+    padding:3px 8px;border-radius:6px;display:inline-flex;align-items:center;gap:3px;
+  }
+  .sr-chg.up{color:var(--green);background:rgba(31,174,107,.12);}
+  .sr-chg.down{color:var(--red);background:rgba(229,72,77,.12);}
+  @media (max-width:600px){
+    .stock-row{grid-template-columns:1fr 60px;}
+    .sr-spark{display:none;}
+  }
+
+  .pt-btn{
+    border:none;background:transparent;font-size:12px;font-weight:600;color:var(--slate-500);
+    padding:6px 12px;border-radius:7px;cursor:pointer;font-family:var(--font-body);
+  }
+  .pt-btn.active{background:var(--navy-900);color:#fff;}
+
+  .pie-circle{
+    width:140px;height:140px;border-radius:50%;flex-shrink:0;
+    background:conic-gradient(var(--line) 0deg 360deg);
+  }
+  .legend{max-height:200px;overflow-y:auto;padding-right:4px;}
+  .legend .row .sym-lbl{font-weight:600;color:var(--navy-900);margin-right:2px;}
+
+  @media (max-width:980px){
+    .app{grid-template-columns:1fr;}
+    .sidebar{flex-direction:row;overflow-x:auto;align-items:center;padding:14px 16px;}
+    .side-foot{display:none;}
+    .cards{grid-template-columns:repeat(2,1fr);}
+    .grid-2{grid-template-columns:1fr;}
+    .entry-form{grid-template-columns:repeat(2,1fr);}
+  }
+</style>
+</head>
+<body>
+
+<script>
+  // ===== ตั้งค่าตรงนี้ =====
+  // นำ URL ที่ได้จากตอน Deploy > Web app ใน Google Apps Script มาใส่ตรงนี้
+  const CONFIG = {
+    API_URL: "https://script.google.com/macros/s/AKfycbxur76bZattDPGzAGOEaVfm7u2Oy0SgXbYJpt9KoJc0AmqJLGfTV7jFgwuidOdc6DoeaQ/exec"
+  };
+</script>
+<div class="status-banner" id="status-banner">🔄 กำลังโหลดข้อมูลจาก Google Sheets...</div>
+
+<div class="ticker-wrap">
+  <div class="ticker" id="ticker"></div>
+</div>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><span class="dot"></span>Port TPF</div>
+    <nav class="nav">
+      <a href="#" class="active">📊 Dashboard <span>›</span></a>
+      <a href="#">🚀 ระยะสั้น</a>
+      <a href="#">🌳 ระยะยาว</a>
+      <a href="#">📝 บันทึกรายการซื้อขาย</a>
+      <a href="#">⚙️ ตั้งค่า</a>
+    </nav>
+    <div class="side-foot">
+      อัปเดตข้อมูลได้จาก <b>คอมหลักที่บ้าน</b> เท่านั้น<br>
+      เครื่องอื่นเปิดดูได้อย่างเดียว (read-only)
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="top-row">
+      <div>
+        <h1 class="page-title">ภาพรวมพอร์ตหุ้นต่างประเทศ</h1>
+        <div class="page-sub">รวมพอร์ตระยะสั้น + ระยะยาว · แปลงเป็นเงินบาทอัตโนมัติ</div>
+      </div>
+      <div class="updated-pill"><span class="pulse" id="pulse-dot"></span> <span id="updated-text">กำลังโหลด...</span></div>
+    </div>
+
+    <div class="cards">
+      <div class="card hero">
+        <div class="label">มูลค่าพอร์ตรวม</div>
+        <div class="value" id="v-total-usd">$—</div>
+        <div class="delta up" id="v-total-pct">—</div>
+      </div>
+      <div class="card">
+        <div class="label">มูลค่ารวม (บาท)</div>
+        <div class="value" id="v-total-thb">฿—</div>
+        <div class="delta" id="v-usdthb" style="color:var(--slate-500);">USD/THB —</div>
+      </div>
+      <div class="card">
+        <div class="label">กำไร/ขาดทุนรวม</div>
+        <div class="value" id="v-total-pl">$—</div>
+        <div class="delta" id="v-total-pl-pct">—</div>
+      </div>
+      <div class="card">
+        <div class="label">ระยะสั้น vs ระยะยาว</div>
+        <div class="value" id="v-split-pct" style="font-size:19px;">—% / —%</div>
+        <div class="delta" id="v-split-val" style="color:var(--slate-500);">—</div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="short">🚀 พอร์ตระยะสั้น</button>
+      <button class="tab-btn" data-tab="long">🌳 พอร์ตระยะยาว</button>
+      <button class="tab-btn" data-tab="history">🕘 ประวัติการขาย</button>
+    </div>
+
+    <!-- SHORT TERM PANEL -->
+    <div class="panel" id="panel-short">
+      <div class="panel-head">
+        <h3>ระยะสั้น <span class="tag" id="count-short">— หุ้น</span></h3>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <div class="view-toggle">
+            <button class="vt-btn active" data-view="list" data-target="short">📈 รายการ</button>
+            <button class="vt-btn" data-view="table" data-target="short">📋 ตาราง</button>
+          </div>
+          </div>
+      </div>
+
+      <div class="stock-list" id="list-short"></div>
+
+      <table style="display:none;" id="tableview-short">
+        <thead><tr>
+          <th>สัญลักษณ์</th><th>ชื่อ</th><th>จำนวนหุ้น</th><th>ราคาปัจจุบัน</th>
+          <th>%เปลี่ยนแปลง</th><th>มูลค่าปัจจุบัน</th><th>ต้นทุนเฉลี่ย</th><th>กำไร/ขาดทุน</th>
+        </tr></thead>
+        <tbody id="table-short"></tbody>
+      </table>
+    </div>
+
+    <!-- LONG TERM PANEL -->
+    <div class="panel" id="panel-long" style="display:none;">
+      <div class="panel-head">
+        <h3>ระยะยาว <span class="tag" id="count-long">— หุ้น</span></h3>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <div class="view-toggle">
+            <button class="vt-btn active" data-view="list" data-target="long">📈 รายการ</button>
+            <button class="vt-btn" data-view="table" data-target="long">📋 ตาราง</button>
+          </div>
+          </div>
+      </div>
+
+      <div class="stock-list" id="list-long"></div>
+
+      <table style="display:none;" id="tableview-long">
+        <thead><tr>
+          <th>สัญลักษณ์</th><th>ชื่อ</th><th>จำนวนหุ้น</th><th>ราคาปัจจุบัน</th>
+          <th>%เปลี่ยนแปลง</th><th>มูลค่าปัจจุบัน</th><th>ต้นทุนเฉลี่ย</th><th>กำไร/ขาดทุน</th>
+        </tr></thead>
+        <tbody id="table-long"></tbody>
+      </table>
+    </div>
+
+    <!-- HISTORY / SOLD-OUT PANEL -->
+    <div class="panel" id="panel-history" style="display:none;">
+      <div class="panel-head">
+        <h3>ประวัติการขาย <span class="tag">ปิดสถานะแล้ว</span></h3>
+        <span class="footnote" style="margin:0;">หุ้นที่ขายจนหมด (เหลือ 0 หุ้น) จะหายไปจากตารางพอร์ตด้านบน แล้วย้ายมาอยู่ที่นี่แทน</span>
+      </div>
+      <table>
+        <thead><tr>
+          <th>สัญลักษณ์</th><th>พอร์ต</th><th>วันที่ขาย</th><th>จำนวนหุ้นที่ขาย</th>
+          <th>ราคาขายเฉลี่ย</th><th>ต้นทุนเฉลี่ย</th><th>ค่าธรรมเนียมรวม</th><th>กำไร/ขาดทุนที่รับรู้แล้ว</th>
+        </tr></thead>
+        <tbody id="table-history"></tbody>
+      </table>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-head">
+          <h3>สัดส่วนหุ้นที่ถืออยู่</h3>
+          <div class="view-toggle">
+            <button class="pt-btn active" data-pie="short">ระยะสั้น</button>
+            <button class="pt-btn" data-pie="long">ระยะยาว</button>
+          </div>
+        </div>
+        <div class="donut-wrap">
+          <div class="pie-circle" id="pie-short"></div>
+          <div class="legend" id="legend-short"></div>
+        </div>
+        <div class="donut-wrap" style="display:none;" id="pie-wrap-long">
+          <div class="pie-circle" id="pie-long"></div>
+          <div class="legend" id="legend-long"></div>
+        </div>
+        <p class="footnote">คำนวณจากมูลค่าปัจจุบันของหุ้นที่ถืออยู่จริงเท่านั้น หุ้นที่ขายหมดแล้วจะไม่ถูกนับในวงนี้</p>
+      </div>
+
+      <div class="right-col">
+        <div class="panel form-preview">
+          <div class="panel-head">
+            <h3>💵 เติมเงินเข้าพอร์ต</h3>
+            <span class="tag soon">เร็วๆ นี้</span>
+          </div>
+          <div class="entry-form topup-form">
+            <div class="field"><label>วันที่</label><input type="date" value="2026-07-02" disabled></div>
+            <div class="field"><label>จำนวนเงินบาท</label><input placeholder="เช่น 10,000" disabled></div>
+            <div class="field"><label>อัตราแลกเปลี่ยน (บาท/USD)</label><input placeholder="33.30" disabled></div>
+            <div class="field"><label>ได้รับ (USD)</label><input placeholder="คำนวณอัตโนมัติ" disabled></div>
+          </div>
+          <div class="fee-note">🚧 ตอนนี้เวอร์ชันเว็บยังเป็นแบบ "ดูอย่างเดียว" — การกรอกรายการจริงยังทำที่ Google Sheet บนคอมหลักที่บ้านเหมือนเดิม ฟอร์มนี้เป็นตัวอย่างของเฟสถัดไปที่จะเชื่อมให้กรอกผ่านเว็บได้โดยตรง</div>
+        </div>
+
+        <div class="panel form-preview">
+          <div class="panel-head">
+            <h3>📈 ซื้อ-ขายหุ้น</h3>
+            <span class="tag soon">เร็วๆ นี้</span>
+          </div>
+          <div class="entry-form">
+            <div class="field"><label>วันที่</label><input type="date" value="2026-07-02" disabled></div>
+            <div class="field"><label>พอร์ต</label>
+              <select disabled><option>ระยะสั้น</option><option>ระยะยาว</option></select>
+            </div>
+            <div class="field"><label>Action</label>
+              <select disabled>
+                <option value="buy">ซื้อ</option>
+                <option value="sell">ขาย</option>
+                <option value="div">ปันผล</option>
+              </select>
+            </div>
+            <div class="field"><label>สัญลักษณ์</label><input placeholder="เช่น NVDA" disabled></div>
+
+            <div class="field"><label>จำนวนหุ้น</label><input placeholder="0.00" disabled></div>
+            <div class="field"><label>ราคา (USD)</label><input placeholder="0.00" disabled></div>
+            <div class="field"><label>ค่าคอมมิชชั่น (+/−)</label><input placeholder="0.00" disabled></div>
+            <div class="field"><label>ภาษีมูลค่าเพิ่ม (+/−)</label><input placeholder="0.00" disabled></div>
+          </div>
+          <div class="fee-note">🚧 ยังไม่เปิดใช้งาน — ปัจจุบันบันทึกรายการซื้อขายที่ Google Sheet โดยตรง แล้วเว็บนี้จะดึงมาแสดงให้อัตโนมัติ</div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+function fmt(n){ return (Number(n)||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+
+function sparkPath(seed, up){
+  let pts = [50]; let val = 50;
+  for(let i=1;i<8;i++){
+    const bias = up ? 3 : -3;
+    val += bias + (Math.sin(seed*i*1.7)*10);
+    val = Math.max(8, Math.min(92, val));
+    pts.push(val);
+  }
+  return pts.map((v,i)=>`${i*10},${100-v}`).join(' ');
+}
+
+function renderTable(id, rows){
+  const tbody = document.getElementById(id);
+  tbody.innerHTML = rows.map(r=>{
+    const chgClass = r.chg>=0?'pos':'neg';
+    const plClass = r.pl>=0?'pos':'neg';
+    return `<tr>
+      <td class="sym">${r.sym}</td>
+      <td class="name">${r.name}</td>
+      <td>${r.qty}</td>
+      <td>$${fmt(r.price)}</td>
+      <td class="${chgClass}">${r.chg>=0?'▲':'▼'} ${Math.abs(r.chg).toFixed(2)}%</td>
+      <td>$${fmt(r.val)}</td>
+      <td>$${fmt(r.cost)}</td>
+      <td class="${plClass}">${r.pl>=0?'+':''}$${fmt(r.pl)}</td>
+    </tr>`;
+  }).join('') || `<tr><td colspan="8" style="text-align:center;color:var(--slate-500);">ไม่มีข้อมูล</td></tr>`;
+}
+
+function renderList(id, rows){
+  const wrap = document.getElementById(id);
+  if(!rows.length){ wrap.innerHTML = `<p class="footnote" style="padding:20px 6px;">ไม่มีข้อมูลในพอร์ตนี้</p>`; return; }
+  wrap.innerHTML = rows.map((r,i)=>{
+    const up = r.chg >= 0;
+    const chgClass = up ? 'up' : 'down';
+    const stroke = up ? '#1FAE6B' : '#E5484D';
+    const path = sparkPath(i+1, up);
+    return `<div class="stock-row">
+      <div class="sr-left">
+        <div class="sr-sym">${r.sym} <span class="sr-badge">${r.qty} หุ้น</span></div>
+        <div class="sr-meta">${r.name}</div>
+      </div>
+      <div class="sr-spark">
+        <svg width="70" height="28" viewBox="0 0 70 100" preserveAspectRatio="none">
+          <polyline points="${path}" fill="none" stroke="${stroke}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="sr-right">
+        <div class="sr-price">$${fmt(r.price)}</div>
+        <div class="sr-chg ${chgClass}">${up?'▲':'▼'} ${Math.abs(r.chg).toFixed(2)}%</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderHistory(rows){
+  const tbody = document.getElementById('table-history');
+  if(!rows.length){ tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--slate-500);">ยังไม่มีประวัติการขาย</td></tr>`; return; }
+  tbody.innerHTML = rows.map(r=>{
+    const plClass = r.pl>=0?'pos':'neg';
+    return `<tr>
+      <td class="sym">${r.sym}</td>
+      <td>${r.port}</td>
+      <td>${r.date}</td>
+      <td>${r.qty}</td>
+      <td>—</td>
+      <td>$${fmt(r.cost)}</td>
+      <td>$${fmt(r.fees)}</td>
+      <td class="${plClass}">${r.pl>=0?'+':''}$${fmt(r.pl)}</td>
+    </tr>`;
+  }).join('');
+}
+
+const pieColors = ['#2E6BFF','#3E92CC','#6AB6F2','#0B2545','#8FC7F0','#13315C','#5AA9E6','#1B4B8C','#B7D9F7','#4478D6'];
+
+function renderPie(circleId, legendId, rows){
+  const circle = document.getElementById(circleId);
+  const legend = document.getElementById(legendId);
+  if(!rows.length){
+    circle.style.background = 'var(--line)';
+    legend.innerHTML = `<p class="footnote">ไม่มีข้อมูล</p>`;
+    return;
+  }
+  const total = rows.reduce((s,r)=>s+r.val, 0);
+  let angle = 0;
+  const stops = rows.map((r,i)=>{
+    const slice = total ? (r.val/total)*360 : 0;
+    const from = angle; const to = angle + slice; angle = to;
+    return `${pieColors[i % pieColors.length]} ${from}deg ${to}deg`;
+  }).join(', ');
+  circle.style.background = `conic-gradient(${stops})`;
+  legend.innerHTML = rows.slice().sort((a,b)=>b.val-a.val).map((r)=>{
+    const pct = total ? ((r.val/total)*100).toFixed(1) : '0.0';
+    const colorIdx = rows.indexOf(r);
+    return `<div class="row"><span class="sw" style="background:${pieColors[colorIdx % pieColors.length]}"></span><span class="sym-lbl">${r.sym}</span>${r.name}<span class="val">${pct}%</span></div>`;
+  }).join('');
+}
+
+/* ---- static UI wiring (tabs / view toggles) ---- */
+document.querySelectorAll('.pt-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.pt-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const which = btn.dataset.pie;
+    document.getElementById('pie-short').closest('.donut-wrap').style.display = which==='short' ? 'flex':'none';
+    document.getElementById('pie-wrap-long').style.display = which==='long' ? 'flex':'none';
+  });
+});
+
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const tab = btn.dataset.tab;
+    document.getElementById('panel-short').style.display = tab==='short' ? 'block':'none';
+    document.getElementById('panel-long').style.display = tab==='long' ? 'block':'none';
+    document.getElementById('panel-history').style.display = tab==='history' ? 'block':'none';
+  });
+});
+
+document.querySelectorAll('.vt-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const target = btn.dataset.target;
+    const view = btn.dataset.view;
+    document.querySelectorAll(`.vt-btn[data-target="${target}"]`).forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(`list-${target}`).style.display = view==='list' ? 'flex' : 'none';
+    document.getElementById(`tableview-${target}`).style.display = view==='table' ? 'table' : 'none';
+  });
+});
+
+/* ---- load real data from Google Apps Script ---- */
+function setBanner(state, text){
+  const el = document.getElementById('status-banner');
+  el.className = 'status-banner ' + state;
+  el.textContent = text;
+}
+
+async function loadPortfolio(){
+  if(!CONFIG.API_URL || CONFIG.API_URL.indexOf('PASTE_YOUR_DEPLOYMENT_ID_HERE') !== -1){
+    setBanner('error', '⚠️ ยังไม่ได้ตั้งค่า API_URL — ใส่ลิงก์ Web app จาก Apps Script ในไฟล์นี้ก่อน (ดูคู่มือติดตั้ง.md)');
+    return;
+  }
+  setBanner('', '🔄 กำลังโหลดข้อมูลจาก Google Sheets...');
+  try{
+    const res = await fetch(CONFIG.API_URL);
+    const data = await res.json();
+    if(data.error) throw new Error(data.error);
+
+    const shortTerm = data.shortTerm || [];
+    const longTerm = data.longTerm || [];
+    const history = data.history || [];
+    const s = data.summary || {};
+
+    renderTable('table-short', shortTerm);
+    renderTable('table-long', longTerm);
+    renderList('list-short', shortTerm);
+    renderList('list-long', longTerm);
+    renderHistory(history);
+    renderPie('pie-short', 'legend-short', shortTerm);
+    renderPie('pie-long', 'legend-long', longTerm);
+
+    document.getElementById('count-short').textContent = shortTerm.length + ' หุ้น';
+    document.getElementById('count-long').textContent = longTerm.length + ' หุ้น';
+
+    document.getElementById('v-total-usd').textContent = '$' + fmt(s.totalUSD);
+    document.getElementById('v-total-thb').textContent = '฿' + fmt(s.totalTHB);
+    document.getElementById('v-usdthb').textContent = 'USD/THB ' + (s.usdthb ? fmt(s.usdthb) : '—');
+    document.getElementById('v-total-pl').textContent = (s.totalPL>=0?'+':'') + '$' + fmt(s.totalPL);
+    document.getElementById('v-total-pl').closest('.card').querySelector('.value').style.color = s.totalPL>=0 ? 'inherit' : 'var(--red)';
+    document.getElementById('v-total-pl-pct').textContent = (s.totalPLPct>=0?'▲ +':'▼ ') + Math.abs(s.totalPLPct||0).toFixed(2) + '% ต้นทุน';
+    document.getElementById('v-total-pl-pct').className = 'delta ' + (s.totalPLPct>=0?'up':'down');
+
+    const totalSL = (s.shortValue||0) + (s.longValue||0);
+    const shortPct = totalSL ? ((s.shortValue/totalSL)*100).toFixed(0) : 0;
+    const longPct = totalSL ? ((s.longValue/totalSL)*100).toFixed(0) : 0;
+    document.getElementById('v-split-pct').textContent = `${shortPct}% / ${longPct}%`;
+    document.getElementById('v-split-val').textContent = `$${fmt(s.shortValue)} / $${fmt(s.longValue)}`;
+
+    const tickerData = [...shortTerm, ...longTerm];
+    document.getElementById('ticker').innerHTML = tickerData.length
+      ? (tickerData.map(r=>{
+          const cls = r.chg>=0?'up':'down';
+          return `<div class="tick"><b>${r.sym}</b> $${fmt(r.price)} <span class="${cls}">${r.chg>=0?'▲':'▼'}${Math.abs(r.chg).toFixed(2)}%</span></div>`;
+        }).join('').repeat(2))
+      : '<div class="tick">ยังไม่มีหุ้นในพอร์ต</div>';
+
+    const now = new Date(data.updatedAt || Date.now());
+    document.getElementById('updated-text').textContent =
+      'อัปเดตล่าสุด ' + now.toLocaleString('th-TH', {dateStyle:'medium', timeStyle:'short'});
+
+    setBanner('ok', '✅ เชื่อมต่อ Google Sheets สำเร็จ');
+    setTimeout(()=>{ document.getElementById('status-banner').style.display='none'; }, 2500);
+
+  } catch(err){
+    console.error(err);
+    setBanner('error', '❌ โหลดข้อมูลไม่สำเร็จ: ' + err.message + ' — ลองกด "รีเฟรช" หรือตรวจสอบ Apps Script deployment');
+  }
+}
+
+loadPortfolio();
+setInterval(loadPortfolio, 5 * 60 * 1000); // อัปเดตอัตโนมัติทุก 5 นาที
+</script>
+
+</body>
+</html>
