@@ -322,7 +322,7 @@
   // ===== ตั้งค่าตรงนี้ =====
   // นำ URL ที่ได้จากตอน Deploy > Web app ใน Google Apps Script มาใส่ตรงนี้
   const CONFIG = {
-    API_URL: "https://script.google.com/macros/s/AKfycbxur76bZattDPGzAGOEaVfm7u2Oy0SgXbYJpt9KoJc0AmqJLGfTV7jFgwuidOdc6DoeaQ/exec"
+    API_URL: "https://script.google.com/macros/s/PASTE_YOUR_DEPLOYMENT_ID_HERE/exec"
   };
 </script>
 <div class="status-banner" id="status-banner">🔄 กำลังโหลดข้อมูลจาก Google Sheets...</div>
@@ -368,9 +368,9 @@
         <div class="delta" id="v-usdthb" style="color:var(--slate-500);">USD/THB —</div>
       </div>
       <div class="card">
-        <div class="label">กำไร/ขาดทุนรวม</div>
+        <div class="label">กำไร/ขาดทุนรวม (รวมที่ขายแล้ว)</div>
         <div class="value" id="v-total-pl">$—</div>
-        <div class="delta" id="v-total-pl-pct">—</div>
+        <div class="delta" id="v-total-pl-pct" style="color:var(--slate-500);">—</div>
       </div>
       <div class="card">
         <div class="label">ระยะสั้น vs ระยะยาว</div>
@@ -435,8 +435,9 @@
     <div class="panel" id="panel-history" style="display:none;">
       <div class="panel-head">
         <h3>ประวัติการขาย <span class="tag">ปิดสถานะแล้ว</span></h3>
-        <span class="footnote" style="margin:0;">หุ้นที่ขายจนหมด (เหลือ 0 หุ้น) จะหายไปจากตารางพอร์ตด้านบน แล้วย้ายมาอยู่ที่นี่แทน</span>
+        <span class="tag" id="winrate-short" style="background:var(--blue-100);color:var(--blue-600);">อัตราชนะระยะสั้น —</span>
       </div>
+      <p class="footnote" style="margin-top:-6px;">หุ้นที่ขายจนหมด (เหลือ 0 หุ้น) จะหายไปจากตารางพอร์ตด้านบน แล้วย้ายมาอยู่ที่นี่แทน เรียงจากขายล่าสุดไปเก่าสุด</p>
       <table>
         <thead><tr>
           <th>สัญลักษณ์</th><th>พอร์ต</th><th>วันที่ขาย</th><th>จำนวนหุ้นที่ขาย</th>
@@ -683,10 +684,14 @@ async function loadPortfolio(){
     document.getElementById('v-total-usd').textContent = '$' + fmt(s.totalUSD);
     document.getElementById('v-total-thb').textContent = '฿' + fmt(s.totalTHB);
     document.getElementById('v-usdthb').textContent = 'USD/THB ' + (s.usdthb ? fmt(s.usdthb) : '—');
-    document.getElementById('v-total-pl').textContent = (s.totalPL>=0?'+':'') + '$' + fmt(s.totalPL);
-    document.getElementById('v-total-pl').closest('.card').querySelector('.value').style.color = s.totalPL>=0 ? 'inherit' : 'var(--red)';
-    document.getElementById('v-total-pl-pct').textContent = (s.totalPLPct>=0?'▲ +':'▼ ') + Math.abs(s.totalPLPct||0).toFixed(2) + '% ต้นทุน';
-    document.getElementById('v-total-pl-pct').className = 'delta ' + (s.totalPLPct>=0?'up':'down');
+    document.getElementById('v-total-pl').textContent = (s.combinedPL>=0?'+':'') + '$' + fmt(s.combinedPL);
+    document.getElementById('v-total-pl').closest('.card').querySelector('.value').style.color = s.combinedPL>=0 ? 'inherit' : 'var(--red)';
+    document.getElementById('v-total-pl-pct').textContent = `ถืออยู่ ${s.totalPL>=0?'+':''}$${fmt(s.totalPL)} · ขายแล้ว ${s.realizedPL>=0?'+':''}$${fmt(s.realizedPL)}`;
+
+    const wr = s.winRateShort || {wins:0,total:0,pct:0};
+    document.getElementById('winrate-short').textContent = wr.total
+      ? `อัตราชนะระยะสั้น ${wr.wins}/${wr.total} ไม้ (${wr.pct.toFixed(0)}%)`
+      : 'อัตราชนะระยะสั้น — ยังไม่มีข้อมูล';
 
     const totalSL = (s.shortValue||0) + (s.longValue||0);
     const shortPct = totalSL ? ((s.shortValue/totalSL)*100).toFixed(0) : 0;
